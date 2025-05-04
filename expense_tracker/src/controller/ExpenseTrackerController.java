@@ -66,5 +66,20 @@ public class ExpenseTrackerController {
     }
     view.displayFilteredTransactions(filteredTransactions);
   }
+
+  public boolean undoTransaction() {
+    // Get transaction list
+    List<Transaction> transactionList = model.getTransactions();
+    if (transactionList.isEmpty()) {
+      return false;
+    }
+    else {
+      int index = transactionList.size() - 1;
+      Transaction removing = transactionList.get(index);
+      model.removeTransaction(removing);
+      refresh();
+      return true;
+    }
+  }
     
 }

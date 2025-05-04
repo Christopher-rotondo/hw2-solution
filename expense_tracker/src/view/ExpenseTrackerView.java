@@ -24,12 +24,13 @@ public class ExpenseTrackerView extends JFrame {
   private JButton amountFilterBtn;
 
   private JButton clearFilterBtn;
+  private JButton undoTransactionBtn;
     
   private List<Transaction> displayedTransactions = new ArrayList<>(); // ✅ Moved here
 
   public ExpenseTrackerView() {
     setTitle("Expense Tracker");
-    setSize(600, 400);
+    setSize(700, 500);
 
     String[] columnNames = {"serial", "Amount", "Category", "Date"};
     this.model = new DefaultTableModel(columnNames, 0);
@@ -54,6 +55,7 @@ public class ExpenseTrackerView extends JFrame {
     amountFilterBtn = new JButton("Filter by Amount");
 
     clearFilterBtn = new JButton("Clear Filter");
+    undoTransactionBtn = new JButton("Undo Last Transaction");
     
     JPanel inputPanel = new JPanel();
     inputPanel.add(amountLabel);
@@ -66,6 +68,7 @@ public class ExpenseTrackerView extends JFrame {
     buttonPanel.add(amountFilterBtn);
     buttonPanel.add(categoryFilterBtn);
     buttonPanel.add(clearFilterBtn);
+    buttonPanel.add(undoTransactionBtn);
     
     add(inputPanel, BorderLayout.NORTH);
     add(new JScrollPane(transactionsTable), BorderLayout.CENTER); 
@@ -126,6 +129,10 @@ public class ExpenseTrackerView extends JFrame {
 
   public void addClearFilterListener(ActionListener listener) {
     clearFilterBtn.addActionListener(listener);
+  }
+
+  public void addUndoLastTransactionListener(ActionListener listener) {
+    undoTransactionBtn.addActionListener(listener);
   }
     
   public void refreshTable(List<Transaction> transactions) {

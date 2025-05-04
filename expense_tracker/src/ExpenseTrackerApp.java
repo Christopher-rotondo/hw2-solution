@@ -75,5 +75,10 @@ public class ExpenseTrackerApp {
      controller.applyFilter();
    });
     
+    // Add action listener to the "Undo Last Transaction" button
+    view.addUndoLastTransactionListener(e -> {
+      controller.undoTransaction();
+      controller.applyFilter();
+    });
   }
 }
