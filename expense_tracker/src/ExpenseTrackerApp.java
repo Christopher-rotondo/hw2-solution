@@ -77,7 +77,11 @@ public class ExpenseTrackerApp {
     
     // Add action listener to the "Undo Last Transaction" button
     view.addUndoLastTransactionListener(e -> {
-      controller.undoTransaction();
+      boolean removed = controller.undoTransaction();
+      if (!removed) {
+        JOptionPane.showMessageDialog(view, "No more transactions to undo!");
+        view.toFront();
+      }
       controller.applyFilter();
     });
   }
