@@ -120,7 +120,111 @@ public class TestExample {
         assertEquals(0.00, totalCost, 0.01);
     }
     
+    @Test
+    public void testUndoTransaction() {
+        // Pre-condition: List of transactions is empty
+        assertEquals(0, model.getTransactions().size());
+    
+        // Perform the action: Add a transaction
+	double amount = 50.0;
+	String category = CATEGORY_FOOD;
+        controller.addTransaction(amount, category);
+    
+        // Pre-condition: List of transactions contains only
+	//                the added transaction
+        assertEquals(1, model.getTransactions().size());
+	Transaction firstTransaction = model.getTransactions().get(0);
+	checkTransaction(amount, category, firstTransaction);
 
+	assertEquals(amount, getTotalCost(), 0.01);
+	
+	// Perform the action: Undo the transaction
+        controller.undoTransaction();
+    
+        // Post-condition: List of transactions is empty
+        List<Transaction> transactions = model.getTransactions();
+        assertEquals(0, transactions.size());
+    
+        // Check the total cost after undoing the transaction
+        double totalCost = getTotalCost();
+        assertEquals(0.00, totalCost, 0.01);
+    }
+
+    @Test
+    public void testUndoMultipleTransactions() {
+        // Pre-condition: List of transactions is empty
+        assertEquals(0, model.getTransactions().size());
+    
+        // Perform the action: Add multiple transaction
+	double amount = 50.0;
+	String category = CATEGORY_FOOD;
+        controller.addTransaction(amount, category);
+
+    double amount2 = 200.0;
+	String category2 = CATEGORY_ENTERTAINMENT;
+        controller.addTransaction(amount2, category2);
+    
+        // Pre-condition: List of transactions contains only
+	//                the added transactions
+        assertEquals(2, model.getTransactions().size());
+	Transaction firstTransaction = model.getTransactions().get(0);
+    Transaction secondTransaction = model.getTransactions().get(1);
+	checkTransaction(amount, category, firstTransaction);
+    checkTransaction(amount2, category2, secondTransaction);
+
+	assertEquals(amount+amount2, getTotalCost(), 0.01);
+	
+	// Perform the action: Undo a transaction
+        assertEquals(true, controller.undoTransaction());
+
+        // Post-condition: List of transactions contains only the
+        //                 first added transaction
+        assertEquals(1, model.getTransactions().size());
+
+        // Perform the action: Undo the first transaction added
+        assertEquals(true, controller.undoTransaction());
+    
+        // Post-condition: List of transactions is empty
+        List<Transaction> transactions = model.getTransactions();
+        assertEquals(0, transactions.size());
+    
+        // Check the total cost after undoing the transaction
+        double totalCost = getTotalCost();
+        assertEquals(0.00, totalCost, 0.01);
+    }
+
+    @Test
+    public void testUndoNonexistentTransaction() {
+        // Pre-condition: List of transactions is empty
+        assertEquals(0, model.getTransactions().size());
+    
+        // Perform the action: Add a transaction
+	double amount = 50.0;
+	String category = CATEGORY_FOOD;
+        controller.addTransaction(amount, category);
+    
+        // Pre-condition: List of transactions contains only
+	//                the added transaction
+        assertEquals(1, model.getTransactions().size());
+	Transaction firstTransaction = model.getTransactions().get(0);
+	checkTransaction(amount, category, firstTransaction);
+
+	assertEquals(amount, getTotalCost(), 0.01);
+	
+	// Perform the action: Undo the transaction
+        assertEquals(true, controller.undoTransaction());
+    // Perform the action: Attempt to undo another transaction,
+    //                     but fail
+        assertEquals(false, controller.undoTransaction());
+    
+        // Post-condition: List of transactions is empty
+        List<Transaction> transactions = model.getTransactions();
+        assertEquals(0, transactions.size());
+    
+        // Check the total cost after undoing the transaction
+        double totalCost = getTotalCost();
+        assertEquals(0.00, totalCost, 0.01);
+    }
         
     @Test
     public void testInvalidInputHandling() {
